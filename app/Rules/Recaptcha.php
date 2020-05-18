@@ -26,7 +26,7 @@ class Recaptcha implements Rule
      */
     public function passes($attribute, $value)
     {
-        $response = Zttp::asFormParams()->post('https://www.google.com/recaptcha/api/siteverify', [
+        $response = Zttp::timeout(0)->asFormParams()->post('https://www.google.com/recaptcha/api/siteverify', [
             'secret' => config('services.recaptcha.secret'),
             'response' => $value,
             'remoteip' => request()->ip()
