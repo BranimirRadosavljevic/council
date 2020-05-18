@@ -32,12 +32,14 @@ class Thread extends Model
 
         static::deleting(function ($thread) {
             $thread->replies->each->delete();
+
+            Reputation::decrease($thread->creator, Reputation::THREAD_WAS_PUBLISHED);
         });
 
-        static::created(function($thread) {
+        static::created(function ($thread) {
             $thread->update(['slug' => $thread->title]);
 
-            Reputation::award($thread->creator, Reputation::THREAD_WAS_PUBLISHED);
+            Reputation::increase($thread->creator, Reputation::THREAD_WAS_PUBLISHED);
         });
     }
 
@@ -120,7 +122,7 @@ class Thread extends Model
     public function setSlugAttribute($value)
     {
         $slug = Str::slug($value);
-        
+
         if (static::whereSlug($slug)->exists()) {
             $slug = "{$slug}-" . $this->id;
         }
@@ -131,7 +133,7 @@ class Thread extends Model
     public function markBestReply($reply)
     {
         $this->update(['best_reply_id' => $reply->id]);
-        Reputation::award($reply->owner, Reputation::BEST_REPLY_AWARDED);
+        Reputation::increase($reply->owner, Reputation::BEST_REPLY_AWARDED);
     }
 
     public function toSearchableArray()
