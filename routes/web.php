@@ -23,7 +23,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('threads', 'ThreadController@index');
-Route::get('threads/create', 'ThreadController@create');
+Route::get('threads/create', 'ThreadController@create')->middleware('must-be-confirmed');
 Route::get('threads/search', 'SearchController@show');
 Route::get('threads/{channel:slug}', 'ThreadController@index');
 Route::get('threads/{channel}/{thread}', 'ThreadController@show');
