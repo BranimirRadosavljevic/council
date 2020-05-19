@@ -17,6 +17,12 @@ use Illuminate\Support\Str;
 |
 */
 
+// $factory->state(App\User::class, 'administrator', function () {
+//     return [
+//         'isAdmin' => false
+//     ];
+// });
+
 $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,

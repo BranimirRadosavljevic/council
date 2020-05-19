@@ -9,7 +9,7 @@ $factory->define(Channel::class, function (Faker $faker) {
     $name = $faker->word;
     return [
         'name' => $name,
-        'slug' => $name
-
+        'slug' => $name,
+        'description' => $faker->sentence
     ];
 });

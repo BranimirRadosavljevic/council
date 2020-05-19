@@ -37,6 +37,10 @@ class User extends Authenticatable
         'confirmed' => 'boolean'
     ];
 
+    protected $appends = [
+        'isAdmin'
+    ];
+
     public function threads()
     {
         return $this->hasMany(Thread::class)->latest();
@@ -60,7 +64,12 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return in_array($this->name, ['BaneRadosavljevic']);
+        return in_array($this->email, config('council.administrators'));
+    }
+
+    public function getIsAdminAttribute()
+    {
+        return $this->isAdmin();
     }
 
     public function getAvatarPathAttribute($avatar)

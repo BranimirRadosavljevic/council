@@ -3,9 +3,8 @@
         <a class="navbar-brand" href="{{ url('/') }}">
             {{ config('app.name', 'Laravel') }}
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-            aria-label="{{ __('Toggle navigation') }}">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -18,11 +17,11 @@
                         Browse
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        
+
                         <li><a href="/threads" class="dropdown-item">All Threads</a></li>
-                        
+
                         @if (auth()->check())
-                            <li><a href="/threads?by={{auth()->user()->name}}" class="dropdown-item">My Threads</a></li>
+                        <li><a href="/threads?by={{auth()->user()->name}}" class="dropdown-item">My Threads</a></li>
                         @endif
 
                         <li><a href="/threads?popular=1" class="dropdown-item">Popular Threads</a></li>
@@ -61,6 +60,10 @@
 
                 <user-notifications></user-notifications>
 
+                @if (Auth::user()->isAdmin())
+                    <li class="nav-item"><a href="/admin" class="nav-link"><span class="fa fa-cog" aria-hidden="true"></span></a></li>
+                @endif
+
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -74,8 +77,7 @@
                             {{ __('Logout') }}
                         </a>
 
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                            style="display: none;">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
                     </div>
