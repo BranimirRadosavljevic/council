@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class ChannelsController extends Controller
 {
@@ -23,11 +24,11 @@ class ChannelsController extends Controller
     public function store()
     {
         $data = request()->validate([
-            'name' => 'required|unique:channels',
+            'name' => ['required|unique:channels'],
             'description' => 'required',
         ]);
 
-        $channel = Channel::create($data + [ 'slug' => Str::slug($data['name'])]);
+        $channel = Channel::create($data + ['slug' => Str::slug($data['name'])]);
 
         Cache::forget('channels');
 
@@ -37,5 +38,34 @@ class ChannelsController extends Controller
 
         return redirect(route('admin.channels.index'))
             ->with('flash', 'Your channel has been created!');
+    }
+
+    public function edit(Channel $channel)
+    {
+        return view('admin.channels.edit', compact('channel'));
+    }
+
+    public function update(Channel $channel)
+    {
+        $channel->update(request()->validate([
+            'name' => ['required', Rule::unique('channels')->ignore($channel->id)],
+            'description' => 'required',
+            'archived' => 'required'
+        ]));
+
+        // dd(request('name'));    
+
+        $channel->update([
+            'slug' => Str::slug(request('name'))
+        ]);
+
+        Cache::forget('channels');
+
+        if (request()->wantsJson()) {
+            return response($channel, 200);
+        }
+
+        return redirect(route('admin.channels.index'))
+            ->with('flash', 'Your channel has been updated!');
     }
 }

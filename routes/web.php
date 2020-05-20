@@ -58,6 +58,8 @@ Route::get('/register/confirm', 'Auth\RegisterConfirmationController@index');
 
 Route::get('/api/users', 'Api\UsersController@index');
 Route::post('/api/users/{user:name}/avatar', 'Api\UserAvatarController@store')->middleware('auth')->name('avatar');
+Route::get('/api/channels', 'Api\ChannelsController@index');
+
 
 
 Route::group([
@@ -66,7 +68,9 @@ Route::group([
     'namespace' => 'Admin'
 ], function() {
     Route::get('/', 'DashboardController@index')->name('admin.dashboard.index');
-    Route::post('/channels', 'ChannelsController@store')->name('admin.channels.store');
     Route::get('/channels', 'ChannelsController@index')->name('admin.channels.index');
+    Route::post('/channels', 'ChannelsController@store')->name('admin.channels.store');
     Route::get('/channels/create', 'ChannelsController@create')->name('admin.channels.create');
+    Route::get('/channels/{channel:slug}', 'ChannelsController@edit')->name('admin.channels.edit');
+    Route::patch('/channels/{channel:slug}', 'ChannelsController@update')->name('admin.channels.update');
 });

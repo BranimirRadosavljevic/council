@@ -11,15 +11,17 @@
                 <th>Slug</th>
                 <th>Description</th>
                 <th>Threads</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
             @forelse($channels as $channel)
-                <tr>
+                <tr class="{{ $channel->archived ? 'bg-info' : '' }}">
                     <td>{{$channel->name}}</td>
                     <td>{{$channel->slug}}</td>
                     <td>{{$channel->description}}</td>
                     <td>{{ count($channel->threads) }}</td>
+                    <td><a href="{{ route('admin.channels.edit', ['channel' => $channel->slug]) }}" class="btn btn-sm btn-primary">Edit</a></td>
                 </tr>
             @empty
                 <tr>
