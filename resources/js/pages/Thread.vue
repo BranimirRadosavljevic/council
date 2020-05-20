@@ -11,6 +11,7 @@ export default {
         return {
             repliesCount: this.thread.replies_count,
             locked: this.thread.locked,
+            pinned: this.thread.pinned,
             editing: false,
             title: this.thread.title,
             body: this.thread.body,
@@ -29,6 +30,12 @@ export default {
             this.locked = !this.locked;
         }, 
 
+        togglePin(){
+            let uri = `/pinned-threads/${this.thread.slug}`;
+            axios[this.pinned ? 'delete' : 'post'](uri); 
+            this.pinned = !this.pinned;
+        },
+
         update(){
             let uri = `/threads/${this.thread.channel.slug}/${this.thread.slug}`
             axios.patch(uri, this.form).then(() => {
@@ -46,6 +53,13 @@ export default {
             };
 
             this.editing = false;
+        },
+
+        classes(target) {
+            return [
+                'btn',
+                target ? 'btn-primary' : 'btn-outline-secondary'
+            ];
         }
     },
 }

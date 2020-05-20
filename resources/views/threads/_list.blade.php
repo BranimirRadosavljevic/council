@@ -5,10 +5,15 @@
             <div class="flex">
                 <h4>
                     <a href="{{$thread->path()}}">
+
+                        @if ($thread->pinned)
+                            <i class="fa fa-thumb-tack"></i>
+                        @endif
+
                         @if (auth()->check() && $thread->hasUpdatesFor(auth()->user()))
-                        <strong>{{ $thread->title }}</strong>
+                            <strong>{{ $thread->title }}</strong>
                         @else
-                        {{ $thread->title }}
+                            {{ $thread->title }}
                         @endif
                     </a>
                 </h4>
