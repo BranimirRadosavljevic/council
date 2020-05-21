@@ -49,6 +49,15 @@ class Thread extends Model
         return "/threads/{$this->channel->slug}/{$this->slug}";
     }
 
+    public function getPathAttribute()
+    {
+        if (! $this->channel) {
+            return '';
+        }
+
+        return $this->path();
+    }
+
     public function replies()
     {
         return $this->hasMany(Reply::class);

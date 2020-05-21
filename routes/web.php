@@ -71,6 +71,6 @@ Route::group([
     Route::get('/channels', 'ChannelsController@index')->name('admin.channels.index');
     Route::post('/channels', 'ChannelsController@store')->name('admin.channels.store');
     Route::get('/channels/create', 'ChannelsController@create')->name('admin.channels.create');
-    Route::get('/channels/{channel:slug}', 'ChannelsController@edit')->name('admin.channels.edit');
-    Route::patch('/channels/{channel:slug}', 'ChannelsController@update')->name('admin.channels.update');
+    Route::get('/channels/{channel}', 'ChannelsController@edit')->name('admin.channels.edit');
+    Route::patch('/channels/{channel}', 'ChannelsController@update')->name('admin.channels.update');
 });

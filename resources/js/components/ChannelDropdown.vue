@@ -10,7 +10,7 @@
             </div>
             <ul class="list-group channel-list">
                 <li class="list-group-item" v-for="channel in filteredChannels">
-                    <a href="`/threads/${channel.slug}`" v-text="channel.name"></a>
+                    <a :href="`/threads/${channel.slug}`" v-text="channel.name"></a>
                 </li>
             </ul>
         </div>

@@ -13,7 +13,8 @@ class ChannelsController extends Controller
 {
     public function index()
     {
-        return view('admin.channels.index')->with('channels', Channel::with('threads')->get());
+        $channels = Channel::withCount('threads')->get();
+        return view('admin.channels.index', compact('channels'));
     }
 
     public function create()
@@ -23,14 +24,14 @@ class ChannelsController extends Controller
 
     public function store()
     {
-        $data = request()->validate([
-            'name' => ['required|unique:channels'],
-            'description' => 'required',
-        ]);
+        $channel = Channel::create(
+            request()->validate([
+                'name' => 'required|unique:channels',
+                'description' => 'required',
+            ])
+        );
 
-        $channel = Channel::create($data + ['slug' => Str::slug($data['name'])]);
-
-        Cache::forget('channels');
+        cache()->forget('channels');
 
         if (request()->wantsJson()) {
             return response($channel, 201);
@@ -42,22 +43,21 @@ class ChannelsController extends Controller
 
     public function edit(Channel $channel)
     {
+        //dd(compact('channel'));
         return view('admin.channels.edit', compact('channel'));
     }
 
     public function update(Channel $channel)
     {
-        $channel->update(request()->validate([
-            'name' => ['required', Rule::unique('channels')->ignore($channel->id)],
-            'description' => 'required',
-            'archived' => 'required'
-        ]));
+        $channel->update(
+            request()->validate([
+                'name' => ['required', Rule::unique('channels')->ignore($channel->id)],
+                'description' => 'required',
+                'archived' => 'required|boolean'
+            ])
+        );
 
         // dd(request('name'));    
-
-        $channel->update([
-            'slug' => Str::slug(request('name'))
-        ]);
 
         Cache::forget('channels');
 
